@@ -1,0 +1,4 @@
+org\example\ChatController.class
+org\example\ChatHandler.class
+org\example\WebSocketConfig.class
+org\example\WebSocketApplication.class

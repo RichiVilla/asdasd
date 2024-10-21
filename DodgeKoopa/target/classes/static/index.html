@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat WebSocket</title>
+    <script>
+        let socket;
+        let username = ""; // Variable para almacenar el nombre del usuario
+
+        function connect() {
+            const serverIP = "ws:/192.168.56.1:8081/chat"; // Cambia esto por tu IP real
+            socket = new WebSocket(serverIP);
+
+            socket.onopen = () => {
+                console.log("Conectado al servidor WebSocket");
+            };
+
+            socket.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                const chatBox = document.getElementById("chat");
+                chatBox.value += message.username + ": " + message.text + "\n"; // Mostrar el mensaje recibido
+            };
+
+            socket.onclose = () => {
+                console.log("Conexión cerrada");
+            };
+
+            socket.onerror = (error) => {
+                console.log("Error en la conexión:", error);
+            };
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById("message");
+            const message = messageInput.value;
+
+            if (username === "") {
+                alert("Por favor, ingresa tu nombre antes de enviar un mensaje.");
+                return;
+            }
+
+            // Mostrar el mensaje enviado en el cuadro de texto
+            const chatBox = document.getElementById("chat");
+            chatBox.value += username + ": " + message + "\n"; // Mostrar el mensaje enviado
+
+            // Crear un objeto con el nombre y el mensaje
+            const messageObject = {
+                username: username,
+                text: message
+            };
+
+            socket.send(JSON.stringify(messageObject));
+            messageInput.value = ""; // Limpiar el campo de entrada
+        }
+
+        function setUsername() {
+            const nameInput = document.getElementById("username");
+            username = nameInput.value;
+            alert("Nombre establecido como: " + username);
+        }
+
+        window.onload = connect;
+    </script>
+</head>
+<body>
+<input type="text" id="username" placeholder="Ingresa tu nombre" onblur="setUsername()"><br>
+<textarea id="chat" rows="10" cols="30" readonly></textarea><br>
+<input type="text" id="message" placeholder="Escribe tu mensaje">
+<button onclick="sendMessage()">Enviar</button>
+</body>
+</html>
