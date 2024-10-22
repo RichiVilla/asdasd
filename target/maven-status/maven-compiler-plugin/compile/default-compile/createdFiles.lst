@@ -2,6 +2,7 @@ ChatController.class
 org\example\Character.class
 org\example\ChatHandler.class
 org\example\MessageData.class
+org\example\ChatHandler$1.class
 org\example\WebSocketConfig.class
 org\example\GameLogic.class
 org\example\WebSocketApplication.class
